@@ -22,15 +22,15 @@ By bridging generative multimodal intelligence with a neuro-symbolic Python code
 
 ---
 
-## 🖥️ Live UI Interface & Functionalities
+## 🖥️ Live UI Screenshots & Functionalities
 
-Here is a visual walkthrough of the live Bespoke Atelier web application interface covering its core functionalities:
+Visual screenshots of the live Bespoke Atelier web application interface covering its core functionalities:
 
-| Feature / Interface State | Visual Proof | Description |
-| ------------------------- | ------------ | ----------- |
-| **Atelier Concierge Landing UI** | ![Atelier Landing Page](docs/images/ui_landing_catalog.png) | Elegant editorial interface featuring quick action prompt chips, hand-drawn needle indicators, and floating query bar. |
-| **A2UI Pattern Cards & Catalog** | ![A2UI Pattern Cards](docs/images/ui_pattern_spec_cards.png) | Dynamic A2UI v0.8 surface rendering sewing pattern templates (*Old Money Waistcoat*, *Circle Skirt*, *Milkmaid Dress*, *Wide-Leg Trousers*). |
-| **2D Technical Sketch & Cut List Table** | ![Technical Flat & Cut List](docs/images/ui_technical_flat_cutlist.png) | Real-time CAD flat sketch generation alongside fabric yardage matrix tables across 45" and 60" bolt widths. |
+| Feature / Interface State | Live UI Screenshot | Description |
+| ------------------------- | ------------------ | ----------- |
+| **Atelier Concierge Landing UI** | ![Atelier Landing Page](docs/images/ui_landing_catalog.png) | Editorial interface featuring quick action prompt chips, hand-drawn needle indicators, and floating query bar. |
+| **A2UI Pattern Cards & Catalog** | ![A2UI Pattern Cards](docs/images/ui_pattern_spec_cards.png) | Dynamic A2UI v0.8 surface rendering sewing pattern templates with pre-attached 2D technical sketches (*Old Money Waistcoat*, *Circle Skirt*, *Milkmaid Dress*, *Wide-Leg Trousers*). |
+| **2D Technical Sketch & Cut List Table** | ![Technical Flat & Cut List](docs/images/ui_technical_flat_cutlist.png) | Real-time CAD flat sketch rendering alongside fabric yardage matrix tables across 45" and 60" bolt widths. |
 
 ---
 
@@ -107,58 +107,30 @@ sequenceDiagram
 
 ---
 
-## ✨ Core Features & Visual Proof
+## ✨ Core Features & Functionalities
 
 ### 1. Deterministic CAD Drafting Sandbox
-
 Calculates precise parametric pattern drafting ease, dart intake trigonometry, and cutting yardage optimizations across 45" and 60" fabric bolt widths.
-
-![Deterministic CAD Drafting Sandbox](docs/images/cad_sandbox_math.png)
-
-* **Implementation**: `calculate_pattern_requirements` & `AgentEngineSandboxCodeExecutor` in [`app/tools.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/tools.py#L318-L444)
+* **Implementation**: `calculate_pattern_requirements` & `AgentEngineSandboxCodeExecutor` in [`app/tools.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/tools.py)
 * **Mathematical Precision**: Eliminates LLM arithmetic hallucination by delegating circle skirt radius math \(r = \frac{\text{waist} + \text{ease}}{2\pi}\) and dart intake angles directly to a secure Python sandbox.
 
----
-
 ### 2. 2D Technical Flat Generation
-
 Generates clean, production-ready 2D technical fashion flat sketches (front and back CAD tech pack views) complete with topstitching, seams, and pocket placements.
-
-![2D Technical Flat Sketch Generation](docs/images/flat_sketch_preview.png)
-
-* **Implementation**: `generate_fashion_flat_sketch` in [`app/tools.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/tools.py#L695-L787)
+* **Implementation**: `generate_fashion_flat_sketch` in [`app/tools.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/tools.py)
 * **Model**: **Gemini 3.1 Flash Lite Image** on Vertex AI (`location="global"`).
 
----
-
 ### 3. Omni 360° Fabric Drape Video
-
 Renders photorealistic 360-degree turntable studio videos displaying garments on tailor dress form mannequins to preview textile drape and silhouette balance.
-
-![Omni 360° Fabric Drape Video](docs/images/omni_video_frame.png)
-
-* **Implementation**: `generate_garment_motion_preview` in [`app/tools.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/tools.py#L791-L913)
+* **Implementation**: `generate_garment_motion_preview` in [`app/tools.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/tools.py)
 * **Model**: **`gemini-omni-flash-preview`** / **`veo-3.1-fast-generate-001`** on Vertex AI (`location="global"`).
 
----
-
 ### 4. Cross-Session Memory Bank
-
 Automatically extracts and remembers durable client body measurements (bust, waist, hips, inseam, height), tailoring fit preferences, and fiber sensitivities across sessions.
-
-![Cross-Session Memory Bank](docs/images/memory_bank_profile.png)
-
-* **Implementation**: `VertexAiMemoryBankService` & `generate_memories_callback` in [`app/agent.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/agent.py#L67-L85)
+* **Implementation**: `VertexAiMemoryBankService` & `generate_memories_callback` in [`app/agent.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/agent.py)
 * **Persistence**: Automatically injects saved client body profiles into prompt context via `PreloadMemoryTool`.
 
----
-
 ### 5. A2UI Spec Sheets & Fabric Cut Lists
-
 Emits structured **A2UI v0.8 Basic Catalog** JSON components to render interactive spec cards, yardage tables, notion lists, and downloadable vector SVG pattern links.
-
-![A2UI Spec Sheets](docs/images/a2ui_spec_sheet.png)
-
 * **Implementation**: `A2uiSchemaManager` & `a2ui_callback` in [`app/a2ui_utils.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/a2ui_utils.py)
 * **Component Pipeline**: Generates clean `beginRendering` surface arrays containing `Card`, `Column`, `Row`, `Text`, and `Image` components.
 
@@ -168,7 +140,7 @@ Emits structured **A2UI v0.8 Basic Catalog** JSON components to render interacti
 
 | Tool Name | Scope & Functionality | Underlying Tech / API |
 | --------- | --------------------- | -------------------- |
-| `get_patterns_by_aesthetic` | Filter sewing pattern templates by aesthetic style (*Old Money*, *Vintage 1950s*, *Cottagecore*, *Minimalist*) | Firestore (`patterns` collection) + Seed Fallback |
+| `get_patterns_by_aesthetic` | Filter sewing pattern templates by aesthetic style (*Old Money*, *Vintage 1950s*, *Cottagecore*, *Minimalist*) with 2D technical flat sketches | Firestore (`patterns` collection) + Seed Fallback |
 | `get_pattern_by_id` | Fetch full pattern specifications by unique template ID | Firestore (`patterns` document) |
 | `save_user_profile` & `get_user_profile` | Save & retrieve user body measurement profiles | Firestore (`user_profiles` collection) |
 | `save_drafted_project` & `list_user_projects` | Store & list customized made-to-measure drafted garment projects | Firestore (`drafted_projects` collection) |
@@ -255,15 +227,7 @@ LOCATION=us-east1
 GCS_BUCKET_NAME=bespoke-atelier-patterns-<YOUR_GCP_PROJECT_ID>
 ```
 
-### 4. Seed Firestore Database (Optional)
-
-Populate your Firestore instance with initial sewing pattern templates:
-
-```bash
-uv run python seed_firestore.py
-```
-
-### 5. Launch Local Application
+### 4. Launch Local Application
 
 Start the local server environment:
 

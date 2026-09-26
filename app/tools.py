@@ -22,6 +22,7 @@ INITIAL_SEED_PATTERNS = [
         "difficulty": "Intermediate",
         "recommended_fabrics": ["Wool Tweed", "Linen-Cotton Blend", "Worst Wool", "Heavy Suit Linen"],
         "yardage_estimate": "1.75 yards (60 inch width)",
+        "flat_sketch_url": f"https://storage.googleapis.com/{GCS_BUCKET_NAME}/flat_sketch_preview.png",
         "base_measurements": {
             "bust": 36.0,
             "waist": 28.0,
@@ -38,6 +39,7 @@ INITIAL_SEED_PATTERNS = [
         "difficulty": "Beginner-Friendly",
         "recommended_fabrics": ["Cotton Poplin", "Taffeta", "Polished Cotton", "Gingham Broadcloth"],
         "yardage_estimate": "4.5 yards (44 inch width)",
+        "flat_sketch_url": f"https://storage.googleapis.com/{GCS_BUCKET_NAME}/flat_sketch_preview.png",
         "base_measurements": {
             "bust": 35.0,
             "waist": 26.5,
@@ -54,6 +56,7 @@ INITIAL_SEED_PATTERNS = [
         "difficulty": "Intermediate",
         "recommended_fabrics": ["Linen Voile", "Gathered Cotton Lawn", "Rayon Crepe", "Embroidered Eyelet"],
         "yardage_estimate": "3.8 yards (54 inch width)",
+        "flat_sketch_url": f"https://storage.googleapis.com/{GCS_BUCKET_NAME}/flat_sketch_preview.png",
         "base_measurements": {
             "bust": 34.0,
             "waist": 27.0,
@@ -70,6 +73,7 @@ INITIAL_SEED_PATTERNS = [
         "difficulty": "Advanced",
         "recommended_fabrics": ["Heavy Linen", "Wool Crepe", "Tencel Twill", "Cotton Gabardine"],
         "yardage_estimate": "2.75 yards (58 inch width)",
+        "flat_sketch_url": f"https://storage.googleapis.com/{GCS_BUCKET_NAME}/flat_sketch_preview.png",
         "base_measurements": {
             "waist": 28.0,
             "hip": 39.0,
