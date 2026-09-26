@@ -114,43 +114,43 @@ sequenceDiagram
 
 ### 1. Deterministic CAD Drafting Sandbox
 Calculates precise parametric pattern drafting ease, dart intake trigonometry, and cutting yardage optimizations across 45" and 60" fabric bolt widths.
-* **Implementation**: `calculate_pattern_requirements` & `AgentEngineSandboxCodeExecutor` in [`app/tools.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/tools.py)
+* **Implementation**: `calculate_pattern_requirements` & `AgentEngineSandboxCodeExecutor` in [`app/tools.py`](app/tools.py)
 * **Mathematical Precision**: Eliminates LLM arithmetic hallucination by delegating circle skirt radius math \(r = \frac{\text{waist} + \text{ease}}{2\pi}\) and dart intake angles directly to a secure Python sandbox.
 
 ### 2. Parametric 2D Vector SVG Pattern Drafting
 Generates clean, scalable 2D vector SVG sewing pattern files complete with seam allowances (5/8"), grainline arrows, center front fold markers, and cutting instructions.
-* **Implementation**: `generate_pattern_svg` in [`app/tools.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/tools.py)
+* **Implementation**: `generate_pattern_svg` in [`app/tools.py`](app/tools.py)
 * **Live UI Rendering**: ![SVG Pattern Draft UI](docs/images/ui_svg_pattern_draft.png)
 * **Sample Vector SVG**: ![Pattern SVG Preview](docs/images/pattern_preview.svg)
 
 ### 3. 2D Technical Flat Generation
 Generates clean, production-ready 2D technical fashion flat sketches (front and back CAD tech pack views) complete with topstitching, seams, and pocket placements.
-* **Implementation**: `generate_fashion_flat_sketch` in [`app/tools.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/tools.py)
+* **Implementation**: `generate_fashion_flat_sketch` in [`app/tools.py`](app/tools.py)
 * **Model**: **Gemini 3.1 Flash Lite Image** on Vertex AI (`location="global"`).
 
 ### 4. Live Weather Climate Fabric Advice
 Fetches live temperature and relative humidity via Open-Meteo REST API to generate tailored fabric GSM, natural fiber recommendations, and interior lining rules.
-* **Implementation**: `get_climate_fabric_advice` in [`app/tools.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/tools.py)
+* **Implementation**: `get_climate_fabric_advice` in [`app/tools.py`](app/tools.py)
 * **Live UI Rendering**: ![Climate Fabric Advice UI](docs/images/ui_climate_fabric_weather.png)
 
 ### 5. Historical Met Museum Costume Search
 Searches The Metropolitan Museum of Art Costume Institute REST API for historical garment artifacts, creation dates, materials, and high-res museum imagery.
-* **Implementation**: `search_historic_fashion` in [`app/tools.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/tools.py)
+* **Implementation**: `search_historic_fashion` in [`app/tools.py`](app/tools.py)
 * **Live UI Rendering**: ![The Met Museum Archive UI](docs/images/ui_met_museum_archive.png)
 
 ### 6. Omni 360° Fabric Drape Video
 Renders photorealistic 360-degree turntable studio videos displaying garments on tailor dress form mannequins to preview textile drape and silhouette balance.
-* **Implementation**: `generate_garment_motion_preview` in [`app/tools.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/tools.py)
+* **Implementation**: `generate_garment_motion_preview` in [`app/tools.py`](app/tools.py)
 * **Model**: **`gemini-omni-flash-preview`** / **`veo-3.1-fast-generate-001`** on Vertex AI (`location="global"`).
 
 ### 7. Cross-Session Memory Bank
 Automatically extracts and remembers durable client body measurements (bust, waist, hips, inseam, height), tailoring fit preferences, and fiber sensitivities across sessions.
-* **Implementation**: `VertexAiMemoryBankService` & `generate_memories_callback` in [`app/agent.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/agent.py)
+* **Implementation**: `VertexAiMemoryBankService` & `generate_memories_callback` in [`app/agent.py`](app/agent.py)
 * **Persistence**: Automatically injects saved client body profiles into prompt context via `PreloadMemoryTool`.
 
 ### 8. A2UI Spec Sheets & Fabric Cut Lists
 Emits structured **A2UI v0.8 Basic Catalog** JSON components to render interactive spec cards, yardage tables, notion lists, and downloadable vector SVG pattern links.
-* **Implementation**: `A2uiSchemaManager` & `a2ui_callback` in [`app/a2ui_utils.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/a2ui_utils.py)
+* **Implementation**: `A2uiSchemaManager` & `a2ui_callback` in [`app/a2ui_utils.py`](app/a2ui_utils.py)
 * **Component Pipeline**: Generates clean `beginRendering` surface arrays containing `Card`, `Column`, `Row`, `Text`, and `Image` components.
 
 ---
