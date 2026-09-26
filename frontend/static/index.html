@@ -548,19 +548,29 @@ function parseMarkdownToNode(text) {
   // Convert remaining raw HTTPS URLs to clickable links
   html = html.replace(/(?<!src="|href=")(https?:\/\/[^\s\)\><]+)/gi, '<a href="$1" target="_blank" class="a2link">$1 🔗</a>');
 
-  // Convert bullet points (* item or - item)
+  // Convert markdown bold **text** -> <strong>text</strong>
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+  // Convert markdown italic *text* or _text_ -> <em>text</em>
+  html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  html = html.replace(/_(.*?)_/g, '<em>$1</em>');
+
+  // Convert markdown inline code `code` -> <code>code</code>
+  html = html.replace(/`(.*?)`/g, '<code style="background: rgba(0,0,0,0.05); padding: 0.15rem 0.35rem; border-radius: 4px; font-size: 0.9em;">$1</code>');
+
+  // Convert bullet points (* item, - item, or • item)
   const lines = html.split("\n");
   let inList = false;
   let outLines = [];
 
   for (let line of lines) {
     const trimmed = line.trim();
-    if (trimmed.startsWith("* ") || trimmed.startsWith("- ")) {
+    if (trimmed.startsWith("* ") || trimmed.startsWith("- ") || trimmed.startsWith("• ")) {
       if (!inList) {
         inList = true;
         outLines.push('<ul style="margin: 0.5rem 0; padding-left: 1.4rem;">');
       }
-      outLines.push(`<li>${trimmed.substring(2)}</li>`);
+      outLines.push(`<li>${trimmed.replace(/^[\*\-•]\s+/, "")}</li>`);
     } else {
       if (inList) {
         inList = false;
