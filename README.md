@@ -31,6 +31,7 @@ Visual screenshots of the live Bespoke Atelier web application interface coverin
 | **Atelier Concierge Landing UI** | ![Atelier Landing Page](docs/images/ui_landing_catalog.png) | Editorial interface featuring quick action prompt chips, hand-drawn needle indicators, and floating query bar. |
 | **A2UI Pattern Cards & Catalog** | ![A2UI Pattern Cards](docs/images/ui_pattern_spec_cards.png) | Dynamic A2UI v0.8 surface rendering sewing pattern templates with pre-attached 2D technical sketches (*Old Money Waistcoat*, *Circle Skirt*, *Milkmaid Dress*, *Wide-Leg Trousers*). |
 | **2D Technical Sketch & Cut List Table** | ![Technical Flat & Cut List](docs/images/ui_technical_flat_cutlist.png) | Real-time CAD flat sketch rendering alongside fabric yardage matrix tables across 45" and 60" bolt widths. |
+| **Parametric Vector SVG Pattern File** | ![Pattern SVG Preview](docs/images/pattern_preview.svg) | Dynamically generated 2D vector CAD pattern piece with grainlines, seam allowances (5/8"), notches, and cutting metadata. |
 
 ---
 
@@ -114,22 +115,27 @@ Calculates precise parametric pattern drafting ease, dart intake trigonometry, a
 * **Implementation**: `calculate_pattern_requirements` & `AgentEngineSandboxCodeExecutor` in [`app/tools.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/tools.py)
 * **Mathematical Precision**: Eliminates LLM arithmetic hallucination by delegating circle skirt radius math \(r = \frac{\text{waist} + \text{ease}}{2\pi}\) and dart intake angles directly to a secure Python sandbox.
 
-### 2. 2D Technical Flat Generation
+### 2. Parametric 2D Vector SVG Pattern Drafting
+Generates clean, scalable 2D vector SVG sewing pattern files complete with seam allowances (5/8"), grainline arrows, center front fold markers, and cutting instructions.
+* **Implementation**: `generate_pattern_svg` in [`app/tools.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/tools.py)
+* **Sample Output**: ![Pattern SVG Preview](docs/images/pattern_preview.svg)
+
+### 3. 2D Technical Flat Generation
 Generates clean, production-ready 2D technical fashion flat sketches (front and back CAD tech pack views) complete with topstitching, seams, and pocket placements.
 * **Implementation**: `generate_fashion_flat_sketch` in [`app/tools.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/tools.py)
 * **Model**: **Gemini 3.1 Flash Lite Image** on Vertex AI (`location="global"`).
 
-### 3. Omni 360° Fabric Drape Video
+### 4. Omni 360° Fabric Drape Video
 Renders photorealistic 360-degree turntable studio videos displaying garments on tailor dress form mannequins to preview textile drape and silhouette balance.
 * **Implementation**: `generate_garment_motion_preview` in [`app/tools.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/tools.py)
 * **Model**: **`gemini-omni-flash-preview`** / **`veo-3.1-fast-generate-001`** on Vertex AI (`location="global"`).
 
-### 4. Cross-Session Memory Bank
+### 5. Cross-Session Memory Bank
 Automatically extracts and remembers durable client body measurements (bust, waist, hips, inseam, height), tailoring fit preferences, and fiber sensitivities across sessions.
 * **Implementation**: `VertexAiMemoryBankService` & `generate_memories_callback` in [`app/agent.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/agent.py)
 * **Persistence**: Automatically injects saved client body profiles into prompt context via `PreloadMemoryTool`.
 
-### 5. A2UI Spec Sheets & Fabric Cut Lists
+### 6. A2UI Spec Sheets & Fabric Cut Lists
 Emits structured **A2UI v0.8 Basic Catalog** JSON components to render interactive spec cards, yardage tables, notion lists, and downloadable vector SVG pattern links.
 * **Implementation**: `A2uiSchemaManager` & `a2ui_callback` in [`app/a2ui_utils.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/a2ui_utils.py)
 * **Component Pipeline**: Generates clean `beginRendering` surface arrays containing `Card`, `Column`, `Row`, `Text`, and `Image` components.
