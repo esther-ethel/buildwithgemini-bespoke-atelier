@@ -529,34 +529,37 @@ function parseMarkdownToNode(text) {
   let html = text
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-  // Convert MP4 video URLs (whether in quotes, parens, links, or raw text) into interactive video cards FIRST
+  // 1. Convert markdown bold **text** -> <strong>text</strong>
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+  // 2. Convert markdown italic *text* or _text_ -> <em>text</em>
+  html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  html = html.replace(/_(.*?)_/g, '<em>$1</em>');
+
+  // 3. Convert markdown inline code `code` -> <code>code</code>
+  html = html.replace(/`(.*?)`/g, '<code style="background: rgba(0,0,0,0.05); padding: 0.15rem 0.35rem; border-radius: 4px; font-size: 0.9em;">$1</code>');
+
+  // 4. Convert MP4 video URLs into interactive video cards
   html = html.replace(/(?:\[.*?\]\()?["']?(https?:\/\/[^\s"'<>\)]+\.mp4[^\s"'<>\)]*)["']?\)?/gi, (match, url) => {
     const cleanUrl = url.replace(/["'\)].*$/, "");
     return `<div class="a2card" style="margin-top: 0.8rem; padding: 1.25rem; background: #FAFAF7; border: 1px solid #E6E2DA; border-radius: 14px;"><div style="font-family: 'Caveat', cursive; font-size: 1.6rem; color: #8B263E; margin-bottom: 0.6rem; font-weight: 700;">🎬 360° Garment Motion Preview</div><video src="${cleanUrl}" controls autoplay loop muted style="width: 100%; max-height: 480px; border-radius: 10px; border: 1px solid #E6E2DA; background: #000; object-fit: contain;"></video><div style="margin-top: 0.85rem;"><a href="${cleanUrl}" target="_blank" class="a2link-btn"><span>Open High-Res MP4 Video</span> 🔗</a></div></div>`;
   });
 
-  // Convert markdown links [text](url) -> <a href="url" target="_blank" class="a2link">text 🔗</a>
+  // 5. Convert markdown links [text](url) -> <a href="url" target="_blank" class="a2link">text 🔗</a>
   html = html.replace(/\[(.*?)\]\((https?:\/\/[^\s\)]+)\)/g, '<a href="$2" target="_blank" class="a2link">$1 🔗</a>');
 
-  // Convert markdown images ![alt](url) -> <img>
+  // 6. Convert markdown images ![alt](url) -> <img>
   html = html.replace(/!\[(.*?)\]\((https?:\/\/[^\s\)]+)\)/g, '<img src="$2" alt="$1" class="a2img" />');
 
-  // Convert standalone image URLs (storage.googleapis.com with image extension or flat_sketch) to <img>
+  // 7. Convert standalone image URLs to <img>
   html = html.replace(/(?<!src=")(https?:\/\/storage\.googleapis\.com\/[^\s\)\>]+\.(?:png|jpg|jpeg|gif|webp))/gi, '<img src="$1" class="a2img" />');
   html = html.replace(/(?<!src=")(https?:\/\/storage\.googleapis\.com\/[^\s\)\>]+flat_sketch[^\s\)\>]+)/gi, '<img src="$1" class="a2img" />');
 
-  // Convert remaining raw HTTPS URLs to clickable links
+  // 8. Convert remaining raw HTTPS URLs to clickable links
   html = html.replace(/(?<!src="|href=")(https?:\/\/[^\s\)\><]+)/gi, '<a href="$1" target="_blank" class="a2link">$1 🔗</a>');
 
-  // Convert markdown bold **text** -> <strong>text</strong>
-  html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-  // Convert markdown italic *text* or _text_ -> <em>text</em>
-  html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-  html = html.replace(/_(.*?)_/g, '<em>$1</em>');
-
-  // Convert markdown inline code `code` -> <code>code</code>
-  html = html.replace(/`(.*?)`/g, '<code style="background: rgba(0,0,0,0.05); padding: 0.15rem 0.35rem; border-radius: 4px; font-size: 0.9em;">$1</code>');
+  // 9. Strip any leftover stray or dangling asterisks around HTML elements
+  html = html.replace(/\*\*+/g, '').replace(/(?<=^|>)\s*\*+\s*(?=<|$)/g, '');
 
   // Convert bullet points (* item, - item, or • item)
   const lines = html.split("\n");
