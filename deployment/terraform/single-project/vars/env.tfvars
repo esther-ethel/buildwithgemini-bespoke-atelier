@@ -2,7 +2,7 @@
 project_name = "simple-agent"
 
 # Your Google Cloud project id
-project_id = "qwiklabs-gcp-03-7d5352e0a1dc"
+project_id = "your-gcp-project-id"
 
 # The Google Cloud region you will use to deploy the infrastructure
 region = "us-east1"

@@ -9,9 +9,9 @@ from typing import Optional, Dict, Any, List
 from google.cloud import firestore
 from google.api_core.exceptions import NotFound, GoogleAPIError
 
-# Hardcode GCP Project ID explicitly as a string (do NOT use GOOGLE_CLOUD_PROJECT)
-FIRESTORE_PROJECT = "qwiklabs-gcp-03-7d5352e0a1dc"
-GCS_BUCKET_NAME = "bespoke-atelier-patterns-qwiklabs-gcp-03-7d5352e0a1dc"
+# Read GCP Project ID dynamically from environment
+FIRESTORE_PROJECT = os.getenv("GOOGLE_CLOUD_PROJECT", "your-gcp-project-id")
+GCS_BUCKET_NAME = os.getenv("GCS_BUCKET_NAME", f"bespoke-atelier-patterns-{FIRESTORE_PROJECT}")
 
 # Initial seed data used as fallback when Firestore database has not been initialized
 INITIAL_SEED_PATTERNS = [

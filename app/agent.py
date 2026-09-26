@@ -63,15 +63,15 @@ if metadata_path.exists():
     except Exception:
         sandbox_executor = None
 
-# Configure Memory Bank service for future redeployments (reuse Agent Engine 3367485257505832960)
-MEMORY_BANK_ID = "3367485257505832960"
-PROJECT_ID = "qwiklabs-gcp-03-7d5352e0a1dc"
-LOCATION = "us-east1"
+# Configure Memory Bank service dynamically from environment variables
+MEMORY_BANK_ID = os.getenv("MEMORY_BANK_ID", "")
+PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT", "your-gcp-project-id")
+LOCATION = os.getenv("LOCATION", "us-east1")
 
 memory_service = VertexAiMemoryBankService(
     project=PROJECT_ID,
     location=LOCATION,
-    agent_engine_id=MEMORY_BANK_ID,
+    agent_engine_id=MEMORY_BANK_ID if MEMORY_BANK_ID else None,
 )
 
 

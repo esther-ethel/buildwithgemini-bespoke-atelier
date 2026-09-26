@@ -10,8 +10,6 @@
 ![A2UI Protocol](https://img.shields.io/badge/A2UI_v0.8-FF6F00?style=for-the-badge&logo=protobuf&logoColor=white)
 ![Firestore](https://img.shields.io/badge/Firestore-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 
-🌐 **Live Deployed Web Application**: [https://bespoke-atelier-frontend-1045694854622.us-east1.run.app](https://bespoke-atelier-frontend-1045694854622.us-east1.run.app)
-
 ![Bespoke Atelier Demo Walkthrough](demo.gif)
 
 ---
