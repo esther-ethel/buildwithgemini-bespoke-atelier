@@ -225,8 +225,8 @@ Follow these steps to run the Bespoke Atelier concierge on your local machine.
 ### 1. Clone & Install Dependencies
 
 ```bash
-git clone https://github.com/your-username/bespoke-atelier.git
-cd bespoke-atelier
+git clone https://github.com/esther-ethel/buildwithgemini-bespoke-atelier.git
+cd buildwithgemini-bespoke-atelier
 uv sync
 ```
 
