@@ -31,9 +31,9 @@ Visual screenshots of the live Bespoke Atelier web application interface coverin
 | **Atelier Concierge Landing UI** | ![Atelier Landing Page](docs/images/ui_landing_catalog.png) | Editorial interface featuring quick action prompt chips, hand-drawn needle indicators, and floating query bar. |
 | **A2UI Pattern Cards & Catalog** | ![A2UI Pattern Cards](docs/images/ui_pattern_spec_cards.png) | Dynamic A2UI v0.8 surface rendering sewing pattern templates with pre-attached 2D technical sketches (*Old Money Waistcoat*, *Circle Skirt*, *Milkmaid Dress*, *Wide-Leg Trousers*). |
 | **2D Technical Sketch & Cut List Table** | ![Technical Flat & Cut List](docs/images/ui_technical_flat_cutlist.png) | Real-time CAD flat sketch rendering alongside fabric yardage matrix tables across 45" and 60" bolt widths. |
+| **Parametric Vector SVG Pattern Card** | ![SVG Pattern Draft UI](docs/images/ui_svg_pattern_draft.png) | Dynamically generated 2D vector CAD pattern piece card with downloadable public GCS SVG file link, seam allowances, and grainlines. |
 | **Open-Meteo Climate Fabric Advice** | ![Climate Fabric Advice UI](docs/images/ui_climate_fabric_weather.png) | Live external weather API integration fetching temperature/humidity to recommend fabric GSM, natural fiber weaves, and lining. |
 | **The Met Museum Costume Archive Search** | ![The Met Museum Archive UI](docs/images/ui_met_museum_archive.png) | Live external Met Museum archive API search displaying historical costume artifacts, creation dates, and high-res museum images. |
-| **Parametric Vector SVG Pattern File** | ![Pattern SVG Preview](docs/images/pattern_preview.svg) | Dynamically generated 2D vector CAD pattern piece with grainlines, seam allowances (5/8"), notches, and cutting metadata. |
 
 ---
 
@@ -120,7 +120,8 @@ Calculates precise parametric pattern drafting ease, dart intake trigonometry, a
 ### 2. Parametric 2D Vector SVG Pattern Drafting
 Generates clean, scalable 2D vector SVG sewing pattern files complete with seam allowances (5/8"), grainline arrows, center front fold markers, and cutting instructions.
 * **Implementation**: `generate_pattern_svg` in [`app/tools.py`](file:///config/.gemini/antigravity/scratch/bespoke-atelier/app/tools.py)
-* **Sample Output**: ![Pattern SVG Preview](docs/images/pattern_preview.svg)
+* **Live UI Rendering**: ![SVG Pattern Draft UI](docs/images/ui_svg_pattern_draft.png)
+* **Sample Vector SVG**: ![Pattern SVG Preview](docs/images/pattern_preview.svg)
 
 ### 3. 2D Technical Flat Generation
 Generates clean, production-ready 2D technical fashion flat sketches (front and back CAD tech pack views) complete with topstitching, seams, and pocket placements.
