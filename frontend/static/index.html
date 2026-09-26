@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bespoke Atelier & Pattern Concierge</title>
+<!-- Google Fonts: Dancing Script & Caveat (Cursive Handwritten Fonts), Fraunces (Editorial), Inter (Body) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Dancing+Script:wght@600;700&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
+<style>
+  :root {
+    --bg-muslin: #F9F8F6;
+    --text-charcoal: #1C2321;
+    --accent-slate: #2C3E50;
+    --border-subtle: #E6E2DA;
+    --card-white: #FFFFFF;
+    --user-bubble: #1C2321;
+    --chip-hover-bg: #2C3E50;
+    --chip-hover-text: #FFFFFF;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-muslin);
+    color: var(--text-charcoal);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* --- Header: Center Aligned Title --- */
+  header {
+    background: var(--bg-muslin);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 1.2rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center aligned */
+    text-align: center;
+    z-index: 10;
+  }
+
+  .brand {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-charcoal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85rem;
+  }
+
+  /* --- Expanded Container --- */
+  .container {
+    max-width: 1150px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 70px);
+    position: relative;
+    padding: 0 1rem;
+  }
+
+  /* --- Chat Log --- */
+  #log {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem 1rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    scroll-behavior: smooth;
+  }
+
+  /* --- Messages --- */
+  .msg {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .msg.user {
+    align-items: flex-end;
+  }
+
+  .msg.agent {
+    align-items: flex-start;
+  }
+
+  /* User Bubble */
+  .msg.user .bubble {
+    background: var(--user-bubble);
+    color: #FFFFFF;
+    padding: 0.8rem 1.25rem;
+    border-radius: 18px 18px 4px 18px;
+    max-width: 75%;
+    font-size: 0.98rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    box-shadow: 0 2px 6px rgba(28, 35, 33, 0.08);
+  }
+
+  /* Agent Message: Canvas Text */
+  .msg.agent .bubble {
+    background: transparent;
+    color: var(--text-charcoal);
+    border: none;
+    padding: 0;
+    max-width: 100%;
+    width: 100%;
+    font-size: 1.02rem;
+    line-height: 1.65;
+  }
+
+  .msg.agent .bubble.rich {
+    white-space: normal;
+  }
+
+  /* --- Quick Action Chips --- */
+  .chips-wrapper {
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+    display: flex;
+    gap: 0.65rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    justify-content: center;
+  }
+  .chips-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chip-btn {
+    background: var(--card-white);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-charcoal);
+    border-radius: 9999px;
+    padding: 0.55rem 1.15rem;
+    font-size: 0.85rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .chip-btn:hover {
+    background: var(--chip-hover-bg);
+    color: var(--chip-hover-text);
+    border-color: var(--chip-hover-bg);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(44, 62, 80, 0.15);
+  }
+
+  .chip-btn:hover svg {
+    stroke: #FFFFFF;
+  }
+
+  /* --- Floating Input Bar --- */
+  .footer-container {
+    padding: 0 0.5rem 1.25rem 0.5rem;
+  }
+
+  form#form {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--card-white);
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    padding: 0.55rem 0.6rem 0.55rem 1.25rem;
+    box-shadow: 0 4px 22px rgba(28, 35, 33, 0.06);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  form#form:focus-within {
+    border-color: var(--accent-slate);
+    box-shadow: 0 6px 26px rgba(44, 62, 80, 0.12);
+  }
+
+  input#input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 0.65rem 0;
+    font-size: 0.98rem;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-charcoal);
+    outline: none;
+  }
+
+  input#input::placeholder {
+    color: #8C8983;
+  }
+
+  button.send-btn {
+    padding: 0.7rem 1.35rem;
+    border: none;
+    border-radius: 12px;
+    background: var(--accent-slate);
+    color: #FFFFFF;
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  button.send-btn:hover {
+    background: #1F2D3A;
+  }
+
+  /* --- Cursive Handwritten Font Style for Headings --- */
+  .a2text.a2-h1, .a2text.a2-h2, .a2text.a2-h3, .a2text.a2-h4, .cursive-heading, h1, h2, h3 {
+    font-family: 'Dancing Script', 'Caveat', cursive, serif;
+    color: var(--text-charcoal);
+    letter-spacing: 0.02em;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .a2text.a2-h1 { font-size: 2.3rem; }
+  .a2text.a2-h2 { font-size: 2.0rem; }
+  .a2text.a2-h3 { font-size: 1.7rem; }
+  .a2text.a2-h4 { font-size: 1.45rem; }
+  .a2text.a2-caption { font-size: 0.85rem; color: #6C726F; font-family: 'Inter', sans-serif; }
+
+  /* Interactive Atelier Links & Buttons */
+  a, a.a2link {
+    color: var(--accent-burgundy, #8B263E);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    background: rgba(139, 38, 62, 0.05);
+    border-bottom: 1px solid rgba(139, 38, 62, 0.3);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    word-break: break-all;
+  }
+  a:hover, a.a2link:hover {
+    color: #FFFFFF !important;
+    background: var(--accent-burgundy, #8B263E);
+    border-bottom-color: transparent;
+    box-shadow: 0 2px 8px rgba(139, 38, 62, 0.25);
+    text-decoration: none;
+    transform: translateY(-1px);
+  }
+
+  a.a2link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1.25rem;
+    background: #FAF8F5;
+    color: var(--accent-burgundy, #8B263E) !important;
+    border: 1px solid #D4AF37;
+    border-radius: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-decoration: none !important;
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.15);
+    transition: all 0.25s ease;
+  }
+  a.a2link-btn:hover {
+    background: var(--accent-burgundy, #8B263E);
+    color: #FFFFFF !important;
+    border-color: var(--accent-burgundy, #8B263E);
+    box-shadow: 0 4px 14px rgba(139, 38, 62, 0.3);
+    transform: translateY(-1.5px);
+  }
+
+  /* --- A2UI Cards --- */
+  .a2card {
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 1.5rem;
+    background: var(--card-white);
+    box-shadow: 0 2px 10px rgba(28, 35, 33, 0.04);
+    max-width: 100%;
+    margin-top: 0.85rem;
+  }
+
+  .a2card + .a2card, .a2col > .a2card {
+    margin-top: 0.85rem;
+  }
+
+  .a2col { display: flex; flex-direction: column; gap: 0.6rem; }
+  .a2row { display: flex; flex-direction: row; gap: 0.85rem; align-items: center; flex-wrap: wrap; }
+  .a2row.between { justify-content: space-between; }
+
+  .a2divider {
+    border: none;
+    border-top: 1px solid var(--border-subtle);
+    margin: 0.75rem 0;
+    width: 100%;
+  }
+
+  /* Image Styling with Loading Fallback & Shadow */
+  .a2img {
+    max-width: 100%;
+    max-height: 480px;
+    object-fit: contain;
+    border-radius: 10px;
+    display: block;
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    background: #FAF9F6;
+    margin: 0.6rem 0;
+  }
+
+  /* Grid Format for Spec Tables */
+  table.a2table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.92rem;
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+  }
+
+  table.a2table th, table.a2table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border: 1px solid var(--border-subtle); /* Grid borders */
+  }
+
+  table.a2table th {
+    background: #F2EFE9;
+    font-family: 'Dancing Script', 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--accent-slate);
+  }
+
+  table.a2table tr:nth-child(even) {
+    background: #FAF9F6;
+  }
+
+  .doodle-icon {
+    width: 18px;
+    height: 18px;
+    stroke: var(--accent-slate);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    transition: stroke 0.2s ease;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <svg class="doodle-icon" style="width: 24px; height: 24px;" viewBox="0 0 24 24">
+      <circle cx="6" cy="6" r="3"></circle>
+      <circle cx="6" cy="18" r="3"></circle>
+      <line x1="8.5" y1="8.5" x2="19" y2="19"></line>
+      <line x1="8.5" y1="15.5" x2="19" y2="5"></line>
+    </svg>
+    Bespoke Atelier & Pattern Concierge
+  </div>
+</header>
+
+<div class="container">
+  <div id="log"></div>
+
+  <!-- Quick Action Chips -->
+  <div class="chips-wrapper">
+    <button class="chip-btn" data-prompt="Draft an Old Money linen waistcoat">
+      <svg class="doodle-icon" viewBox="0 0 24 24">
+        <path d="M12 2L4 7v13a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7l-8-5z"></path>
+        <line x1="12" y1="2" x2="12" y2="22"></line>
+      </svg>
+      Draft an Old Money linen waistcoat
+    </button>
+
+    <button class="chip-btn" data-prompt="Curate 1950s ballgowns from The Met">
+      <svg class="doodle-icon" viewBox="0 0 24 24">
+        <path d="M3 21h18M3 10h18M5 10v11M19 10v11M9 10v11M15 10v11M12 3L2 10h20L12 3z"></path>
+      </svg>
+      Curate 1950s ballgowns from The Met
+    </button>
+
+    <button class="chip-btn" data-prompt="Calculate London wool coat yardage">
+      <svg class="doodle-icon" viewBox="0 0 24 24">
+        <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+        <line x1="6" y1="6" x2="6" y2="10"></line>
+        <line x1="10" y1="6" x2="10" y2="12"></line>
+        <line x1="14" y1="6" x2="14" y2="10"></line>
+        <line x1="18" y1="6" x2="18" y2="12"></line>
+      </svg>
+      Calculate London wool coat yardage
+    </button>
+  </div>
+
+  <!-- Floating Input Bar -->
+  <div class="footer-container">
+    <form id="form">
+      <input id="input" placeholder="Ask your concierge for pattern drafting, yardage math, or historical curation…" autocomplete="off" autofocus>
+      <button class="send-btn" type="submit">
+        Send
+        <svg class="doodle-icon" style="stroke: #FFFFFF; width: 16px; height: 16px;" viewBox="0 0 24 24">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+const log = document.getElementById("log");
+const form = document.getElementById("form");
+const input = document.getElementById("input");
+
+function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+function bubble(who) {
+  const m = el("div", "msg " + who);
+  const b = el("div", "bubble");
+  m.appendChild(b); log.appendChild(m); log.scrollTop = log.scrollHeight;
+  return b;
+}
+
+function boundStr(v) {
+  if (v == null) return "";
+  if (typeof v === "string") return v;
+  if (typeof v.literalString === "string") return v.literalString;
+  return "";
+}
+
+function childIds(props) {
+  const ids = [];
+  if (props && typeof props.child === "string") ids.push(props.child);
+  const ch = props && props.children;
+  if (ch && Array.isArray(ch.explicitList)) for (const c of ch.explicitList) if (typeof c === "string") ids.push(c);
+  return ids;
+}
+
+function iconName(n) { return String(n || "").replace(/([a-z0-9])([A-Z])/g, "$1_$2").replace(/\s+/g, "_").toLowerCase(); }
+
+/* --- Markdown & Image Parser (Removes raw * and renders images cleanly) --- */
+function parseMarkdownToNode(text) {
+  if (!text) return null;
+  const container = el("div");
+
+  // Check for SVG pattern markup (raw <svg...></svg> or code block ```xml <svg...> </svg> ```)
+  const svgRegex = /(?:```(?:xml|svg)?\s*)?(<svg[\s\S]*?<\/svg>)(?:\s*```)?/gi;
+  let matches = [...text.matchAll(svgRegex)];
+
+  if (matches.length > 0) {
+    let lastIndex = 0;
+    for (const match of matches) {
+      const fullMatch = match[0];
+      const svgMarkup = match[1];
+      const matchIndex = match.index;
+
+      // Render text before SVG
+      const beforeText = text.substring(lastIndex, matchIndex).trim();
+      if (beforeText) {
+        const textNode = parseMarkdownToNode(beforeText);
+        if (textNode) container.appendChild(textNode);
+      }
+
+      // Render SVG inside a visual Spec Sheet Card
+      const svgCard = el("div", "a2card");
+      svgCard.style.textAlign = "center";
+      svgCard.style.background = "#FFFFFF";
+      svgCard.style.padding = "1.5rem";
+      svgCard.style.margin = "1rem 0";
+      svgCard.style.boxShadow = "0 4px 14px rgba(28, 35, 33, 0.06)";
+
+      const title = el("div", "a2text a2-h3 cursive-heading", "📐 2D Vector Pattern Drafting Layout");
+      title.style.marginBottom = "0.75rem";
+      svgCard.appendChild(title);
+
+      const svgContainer = el("div");
+      svgContainer.style.maxWidth = "100%";
+      svgContainer.style.overflowX = "auto";
+      svgContainer.style.display = "flex";
+      svgContainer.style.justifyContent = "center";
+      svgContainer.innerHTML = svgMarkup; // Visual SVG rendering
+      svgCard.appendChild(svgContainer);
+
+      const caption = el("div", "a2text a2-caption", "Includes 5/8\" (1.5cm) seam allowance, grainlines, notches, and cut lines.");
+      caption.style.marginTop = "0.6rem";
+      svgCard.appendChild(caption);
+
+      container.appendChild(svgCard);
+      lastIndex = matchIndex + fullMatch.length;
+    }
+
+    // Render remaining text after last SVG
+    const remainingText = text.substring(lastIndex).trim();
+    if (remainingText) {
+      const remainingNode = parseMarkdownToNode(remainingText);
+      if (remainingNode) container.appendChild(remainingNode);
+    }
+    return container;
+  }
+
+  // Standard Markdown Sanitization & Rendering
+  let html = text
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+  // Convert MP4 video URLs (whether in quotes, parens, links, or raw text) into interactive video cards FIRST
+  html = html.replace(/(?:\[.*?\]\()?["']?(https?:\/\/[^\s"'<>\)]+\.mp4[^\s"'<>\)]*)["']?\)?/gi, (match, url) => {
+    const cleanUrl = url.replace(/["'\)].*$/, "");
+    return `<div class="a2card" style="margin-top: 0.8rem; padding: 1.25rem; background: #FAFAF7; border: 1px solid #E6E2DA; border-radius: 14px;"><div style="font-family: 'Caveat', cursive; font-size: 1.6rem; color: #8B263E; margin-bottom: 0.6rem; font-weight: 700;">🎬 360° Garment Motion Preview</div><video src="${cleanUrl}" controls autoplay loop muted style="width: 100%; max-height: 480px; border-radius: 10px; border: 1px solid #E6E2DA; background: #000; object-fit: contain;"></video><div style="margin-top: 0.85rem;"><a href="${cleanUrl}" target="_blank" class="a2link-btn"><span>Open High-Res MP4 Video</span> 🔗</a></div></div>`;
+  });
+
+  // Convert markdown links [text](url) -> <a href="url" target="_blank" class="a2link">text 🔗</a>
+  html = html.replace(/\[(.*?)\]\((https?:\/\/[^\s\)]+)\)/g, '<a href="$2" target="_blank" class="a2link">$1 🔗</a>');
+
+  // Convert markdown images ![alt](url) -> <img>
+  html = html.replace(/!\[(.*?)\]\((https?:\/\/[^\s\)]+)\)/g, '<img src="$2" alt="$1" class="a2img" />');
+
+  // Convert standalone image URLs (storage.googleapis.com with image extension or flat_sketch) to <img>
+  html = html.replace(/(?<!src=")(https?:\/\/storage\.googleapis\.com\/[^\s\)\>]+\.(?:png|jpg|jpeg|gif|webp))/gi, '<img src="$1" class="a2img" />');
+  html = html.replace(/(?<!src=")(https?:\/\/storage\.googleapis\.com\/[^\s\)\>]+flat_sketch[^\s\)\>]+)/gi, '<img src="$1" class="a2img" />');
+
+  // Convert remaining raw HTTPS URLs to clickable links
+  html = html.replace(/(?<!src="|href=")(https?:\/\/[^\s\)\><]+)/gi, '<a href="$1" target="_blank" class="a2link">$1 🔗</a>');
+
+  // Convert bullet points (* item or - item)
+  const lines = html.split("\n");
+  let inList = false;
+  let outLines = [];
+
+  for (let line of lines) {
+    const trimmed = line.trim();
+    if (trimmed.startsWith("* ") || trimmed.startsWith("- ")) {
+      if (!inList) {
+        inList = true;
+        outLines.push('<ul style="margin: 0.5rem 0; padding-left: 1.4rem;">');
+      }
+      outLines.push(`<li>${trimmed.substring(2)}</li>`);
+    } else {
+      if (inList) {
+        inList = false;
+        outLines.push('</ul>');
+      }
+      if (trimmed) {
+        if (trimmed.startsWith("### ")) outLines.push(`<h3 class="cursive-heading">${trimmed.substring(4)}</h3>`);
+        else if (trimmed.startsWith("## ")) outLines.push(`<h2 class="cursive-heading">${trimmed.substring(3)}</h2>`);
+        else if (trimmed.startsWith("# ")) outLines.push(`<h1 class="cursive-heading">${trimmed.substring(2)}</h1>`);
+        else if (trimmed.startsWith("<div") || trimmed.startsWith("<img") || trimmed.startsWith("<video")) outLines.push(trimmed);
+        else outLines.push(`<p style="margin: 0.4rem 0;">${trimmed}</p>`);
+      }
+    }
+  }
+  if (inList) outLines.push('</ul>');
+
+  container.innerHTML = outLines.join("");
+  return container;
+}
+
+function buildNode(id, comps, seen) {
+  if (!id || seen.has(id)) return null;
+  seen.add(id);
+  const spec = comps[id];
+  if (!spec || typeof spec !== "object") return null;
+  const type = Object.keys(spec)[0];
+  const props = spec[type] || {};
+  const kids = () => childIds(props).map(cid => buildNode(cid, comps, seen)).filter(Boolean);
+
+  switch (type) {
+    case "Card": {
+      const d = el("div", "a2card"); kids().forEach(n => d.appendChild(n)); return d;
+    }
+    case "Column":
+    case "List": {
+      const horizontal = type === "List" && props.direction === "horizontal";
+      const d = el("div", horizontal ? "a2row" : "a2col"); kids().forEach(n => d.appendChild(n)); return d;
+    }
+    case "Row": {
+      const d = el("div", "a2row" + (props.distribution === "spaceBetween" ? " between" : ""));
+      kids().forEach(n => d.appendChild(n)); return d;
+    }
+    case "Text": {
+      const t = el("div", "a2text");
+      const hint = String(props.usageHint || "body").toLowerCase();
+      if (["h1", "h2", "h3", "h4", "h5", "h6"].includes(hint)) t.classList.add("a2-" + hint);
+      else if (hint === "caption") t.classList.add("a2-caption");
+      
+      const rawText = boundStr(props.text);
+      if (rawText.includes("*") || rawText.includes("#") || rawText.includes("http") || rawText.includes(".mp4")) {
+        const mdNode = parseMarkdownToNode(rawText);
+        if (mdNode) t.appendChild(mdNode);
+        else t.textContent = rawText;
+      } else {
+        t.textContent = rawText;
+      }
+      return t;
+    }
+    case "Divider":
+      return el("hr", "a2divider");
+    case "Video":
+    case "Media":
+    case "Image": {
+      const src = boundStr(props.url || props.src || props.uri);
+      if (!/^https?:\/\//i.test(src)) return null;
+      if (/\.mp4/i.test(src) || src.includes("garment_preview")) {
+        const vCard = el("div", "a2card");
+        vCard.style.marginTop = "0.8rem";
+        vCard.style.padding = "1.25rem";
+        vCard.innerHTML = `<div style="font-family: 'Caveat', cursive; font-size: 1.6rem; color: #8B263E; margin-bottom: 0.6rem; font-weight: 700;">🎬 360° Garment Motion Preview</div><video src="${src}" controls autoplay loop muted style="width: 100%; max-height: 480px; border-radius: 10px; border: 1px solid #E6E2DA; background: #000; object-fit: contain;"></video><div style="margin-top: 0.85rem;"><a href="${src}" target="_blank" class="a2link-btn"><span>Open High-Res MP4 Video</span> 🔗</a></div>`;
+        return vCard;
+      }
+      const img = el("img", "a2img"); img.src = src; img.alt = boundStr(props.alt) || ""; return img;
+    }
+    case "Icon": {
+      const s = el("span", "material-symbols-outlined"); s.textContent = iconName(boundStr(props.name) || props.name); return s;
+    }
+    case "Table": {
+      const tbl = el("table", "a2table");
+      if (Array.isArray(props.headers)) {
+        const tr = el("tr");
+        props.headers.forEach(h => tr.appendChild(el("th", null, boundStr(h))));
+        tbl.appendChild(tr);
+      }
+      if (Array.isArray(props.rows)) {
+        props.rows.forEach(r => {
+          const tr = el("tr");
+          if (Array.isArray(r)) r.forEach(cell => tr.appendChild(el("td", null, boundStr(cell))));
+          tbl.appendChild(tr);
+        });
+      }
+      return tbl;
+    }
+    default:
+      return null;
+  }
+}
+
+function renderSurface(messages, container) {
+  const comps = {};
+  const roots = [];
+  for (const m of messages) {
+    if (m.beginRendering && typeof m.beginRendering.root === "string") roots.push(m.beginRendering.root);
+    const su = m.surfaceUpdate;
+    if (su && Array.isArray(su.components)) for (const c of su.components) if (c && c.id && c.component) comps[c.id] = c.component;
+  }
+  let rootIds = roots.filter(r => comps[r]);
+  if (rootIds.length === 0) {
+    const referenced = new Set();
+    for (const id in comps) { const spec = comps[id]; childIds(spec[Object.keys(spec)[0]] || {}).forEach(c => referenced.add(c)); }
+    rootIds = Object.keys(comps).filter(id => !referenced.has(id));
+  }
+  let drew = false;
+  for (const rid of rootIds) { const node = buildNode(rid, comps, new Set()); if (node) { container.appendChild(node); drew = true; } }
+  return drew;
+}
+
+function flattenText(messages) {
+  const out = [];
+  for (const m of messages) {
+    const su = m.surfaceUpdate;
+    if (su && Array.isArray(su.components)) for (const c of su.components) if (c && c.component && c.component.Text) out.push(boundStr(c.component.Text.text));
+  }
+  return out.join("\n").trim();
+}
+
+function renderReply(b, parts) {
+  b.textContent = "";
+  const texts = parts.filter(p => p && (p.kind === "text" || (!p.kind && p.text))).map(p => p.text || "");
+  const a2ui = parts.filter(p => p && p.kind === "a2ui" && p.data).map(p => p.data);
+
+  const textStr = texts.join("\n").trim();
+  if (textStr) {
+    const parsedTextNode = parseMarkdownToNode(textStr);
+    if (parsedTextNode) b.appendChild(parsedTextNode);
+    else b.appendChild(el("div", null, textStr));
+  }
+
+  if (a2ui.length) {
+    b.classList.add("rich");
+    if (!renderSurface(a2ui, b)) {
+      const fl = flattenText(a2ui);
+      if (fl) b.appendChild(parseMarkdownToNode(fl));
+      else b.appendChild(el("div", null, "(no card content)"));
+    }
+  }
+  if (!b.childNodes.length) b.textContent = "(no response)";
+  log.scrollTop = log.scrollHeight;
+}
+
+async function sendMessage(text, retryCount = 0) {
+  if (!text) return;
+  if (retryCount === 0) {
+    bubble("user").textContent = text;
+    input.value = "";
+  }
+  const b = retryCount > 0 ? log.lastElementChild.querySelector(".bubble") : bubble("agent");
+  b.innerHTML = `<div style="display: inline-flex; align-items: center; gap: 0.6rem; font-family: 'Dancing Script', 'Caveat', cursive; font-size: 1.5rem; color: var(--accent-slate); font-weight: 700;"><svg class="doodle-icon" style="width: 22px; height: 22px; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M18.5 3.5a1.5 1.5 0 0 0-2.12 0L5.5 14.38V18.5h4.12L20.5 7.62a1.5 1.5 0 0 0 0-2.12l-2-2z"></path><path d="M17.5 5.5c3.5 2.5 4.5 8.5 0.5 11.5s-6-1-9 6"></path></svg>Atelier Concierge is crafting your response...</div>`;
+  
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 600000); // 10 minute timeout for long generation
+    const res = await fetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text }),
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+    
+    const raw = await res.text();
+    let data;
+    try { data = JSON.parse(raw); }
+    catch { throw new Error(`Server returned non-JSON (HTTP ${res.status}). ${raw.slice(0, 300)}`); }
+    renderReply(b, data.parts || []);
+  } catch (e) {
+    if (retryCount < 2 && (e.name === "AbortError" || e.message.includes("Failed to fetch") || e.name === "TypeError")) {
+      b.innerHTML = `<span style='color: #C05746;'>Retrying connection (attempt ${retryCount + 1}/2)...</span>`;
+      setTimeout(() => sendMessage(text, retryCount + 1), 2000);
+    } else {
+      b.textContent = "Connection Error: " + (e.message || "Failed to reach server. Please try clicking the prompt again.");
+    }
+  }
+}
+
+form.addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  sendMessage(input.value.trim());
+});
+
+document.querySelectorAll(".chip-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const promptText = btn.getAttribute("data-prompt");
+    if (promptText) {
+      input.value = promptText;
+      sendMessage(promptText);
+    }
+  });
+});
+</script>
+</body>
+</html>

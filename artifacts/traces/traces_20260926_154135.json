@@ -1,0 +1,786 @@
+{
+  "eval_cases": [
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "Hello, what can you help me with?"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "Hello! I am your Bespoke Atelier & Pattern Concierge agent, specializing in helping sewists and tailors manage their custom projects.\n\nI can assist you with the following:\n\n1.  **Manage Measurement Profiles:** I can **save** and **retrieve** your detailed body measurements (bust, waist, hip, height, etc.) to ensure perfect fit for all your projects.\n2.  **Explore Pattern Templates:** You can browse our available sewing patterns and filter them by popular aesthetics, such as **'Old Money'**, **'Cottagecore'**, **'Vintage 1950s'**, and **'Minimalist'**.\n3.  **Draft & Save Projects:** Once you choose a base pattern, I can help you **save** the details of your customized, made-to-measure garment project, including the estimated fabric yardage and any personal notes.\n4.  **List Saved Projects:** I can retrieve a list of all your previously **drafted sewing projects**.\n\nHow can I help you start your next bespoke creation today?"
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "eval_case_id": "greeting",
+      "agent_data": {
+        "agents": {
+          "root_agent": {
+            "agent_id": "root_agent",
+            "agent_type": "LlmAgent",
+            "description": "",
+            "instruction": "You are the Bespoke Atelier & Pattern Concierge agent. You help sewists and tailors save body measurement profiles, explore sewing pattern templates across aesthetic styles (Old Money, Vintage 1950s, Cottagecore, Minimalist), and draft bespoke sewing projects.",
+            "tools": [
+              {
+                "function_declarations": [
+                  {
+                    "description": "Simulates a web search. Use it get information on weather.\n\nArgs:\n    query: A string containing the location to get weather information for.\n\nReturns:\n    A string with the simulated weather information for the queried location.",
+                    "name": "get_weather",
+                    "parameters": {
+                      "properties": {
+                        "query": {
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "query"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Simulates getting the current time for a city.\n\nArgs:\n    query: The name of the city or query to get the current time for.\n\nReturns:\n    A string with the current time information.",
+                    "name": "get_current_time",
+                    "parameters": {
+                      "properties": {
+                        "query": {
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "query"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Retrieves available sewing patterns filtered by aesthetic style.\n\nArgs:\n    aesthetic: Filter patterns by aesthetic style (e.g., 'Old Money', 'Vintage 1950s',\n        'Cottagecore', 'Minimalist'). Leave blank to list all available patterns.\n\nReturns:\n    JSON string containing the matching pattern templates.",
+                    "name": "get_patterns_by_aesthetic",
+                    "parameters": {
+                      "properties": {
+                        "aesthetic": {
+                          "default": "",
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Retrieves full sewing pattern details by unique pattern ID.\n\nArgs:\n    pattern_id: The unique identifier of the pattern (e.g. 'old-money-waistcoat',\n        'cottagecore-milkmaid-dress').\n\nReturns:\n    JSON string containing the detailed pattern information or error message.",
+                    "name": "get_pattern_by_id",
+                    "parameters": {
+                      "properties": {
+                        "pattern_id": {
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "pattern_id"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Saves or updates a user's body measurements profile in Firestore.\n\nArgs:\n    user_id: Unique identifier for the user (e.g. 'user_123' or username).\n    bust: Bust measurement in inches.\n    waist: Waist measurement in inches.\n    hip: Full hip measurement in inches.\n    height: Total height in inches.\n    back_waist_length: Back waist length measurement in inches (default 16.5).\n    preferred_aesthetic: Preferred fashion aesthetic (e.g. 'Old Money', 'Cottagecore', 'Vintage').\n\nReturns:\n    JSON string confirmation of saved profile.",
+                    "name": "save_user_profile",
+                    "parameters": {
+                      "properties": {
+                        "user_id": {
+                          "type": "STRING"
+                        },
+                        "bust": {
+                          "type": "NUMBER"
+                        },
+                        "waist": {
+                          "type": "NUMBER"
+                        },
+                        "hip": {
+                          "type": "NUMBER"
+                        },
+                        "height": {
+                          "type": "NUMBER"
+                        },
+                        "back_waist_length": {
+                          "default": 16.5,
+                          "type": "NUMBER"
+                        },
+                        "preferred_aesthetic": {
+                          "default": "Classic",
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "user_id",
+                        "bust",
+                        "waist",
+                        "hip",
+                        "height"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Retrieves a user's saved body measurements profile.\n\nArgs:\n    user_id: Unique identifier for the user.\n\nReturns:\n    JSON string containing the user profile or error if not found.",
+                    "name": "get_user_profile",
+                    "parameters": {
+                      "properties": {
+                        "user_id": {
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "user_id"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Saves a customized made-to-measure drafted garment project.\n\nArgs:\n    user_id: Unique identifier for the user.\n    project_name: Title of the project (e.g., 'My Vintage Prom Dress').\n    pattern_id: The base pattern template ID used.\n    yardage_required: Calculated fabric yardage estimate (e.g. '3.25 yards').\n    notes: Optional custom notes, fabric choices, or ease adjustments.\n\nReturns:\n    JSON string confirming project creation.",
+                    "name": "save_drafted_project",
+                    "parameters": {
+                      "properties": {
+                        "user_id": {
+                          "type": "STRING"
+                        },
+                        "project_name": {
+                          "type": "STRING"
+                        },
+                        "pattern_id": {
+                          "type": "STRING"
+                        },
+                        "yardage_required": {
+                          "type": "STRING"
+                        },
+                        "notes": {
+                          "default": "",
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "user_id",
+                        "project_name",
+                        "pattern_id",
+                        "yardage_required"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Lists all saved drafted sewing projects for a user.\n\nArgs:\n    user_id: Unique identifier for the user.\n\nReturns:\n    JSON string with list of user projects.",
+                    "name": "list_user_projects",
+                    "parameters": {
+                      "properties": {
+                        "user_id": {
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "user_id"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              }
+            ],
+            "sub_agents": []
+          }
+        },
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "root_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Hello! I am your Bespoke Atelier & Pattern Concierge agent, specializing in helping sewists and tailors manage their custom projects.\n\nI can assist you with the following:\n\n1.  **Manage Measurement Profiles:** I can **save** and **retrieve** your detailed body measurements (bust, waist, hip, height, etc.) to ensure perfect fit for all your projects.\n2.  **Explore Pattern Templates:** You can browse our available sewing patterns and filter them by popular aesthetics, such as **'Old Money'**, **'Cottagecore'**, **'Vintage 1950s'**, and **'Minimalist'**.\n3.  **Draft & Save Projects:** Once you choose a base pattern, I can help you **save** the details of your customized, made-to-measure garment project, including the estimated fabric yardage and any personal notes.\n4.  **List Saved Projects:** I can retrieve a list of all your previously **drafted sewing projects**.\n\nHow can I help you start your next bespoke creation today?"
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "What's the weather like in San Francisco?"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "It's 60 degrees and foggy in San Francisco."
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "eval_case_id": "weather_query",
+      "agent_data": {
+        "agents": {
+          "root_agent": {
+            "agent_id": "root_agent",
+            "agent_type": "LlmAgent",
+            "description": "",
+            "instruction": "You are the Bespoke Atelier & Pattern Concierge agent. You help sewists and tailors save body measurement profiles, explore sewing pattern templates across aesthetic styles (Old Money, Vintage 1950s, Cottagecore, Minimalist), and draft bespoke sewing projects.",
+            "tools": [
+              {
+                "function_declarations": [
+                  {
+                    "description": "Simulates a web search. Use it get information on weather.\n\nArgs:\n    query: A string containing the location to get weather information for.\n\nReturns:\n    A string with the simulated weather information for the queried location.",
+                    "name": "get_weather",
+                    "parameters": {
+                      "properties": {
+                        "query": {
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "query"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Simulates getting the current time for a city.\n\nArgs:\n    query: The name of the city or query to get the current time for.\n\nReturns:\n    A string with the current time information.",
+                    "name": "get_current_time",
+                    "parameters": {
+                      "properties": {
+                        "query": {
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "query"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Retrieves available sewing patterns filtered by aesthetic style.\n\nArgs:\n    aesthetic: Filter patterns by aesthetic style (e.g., 'Old Money', 'Vintage 1950s',\n        'Cottagecore', 'Minimalist'). Leave blank to list all available patterns.\n\nReturns:\n    JSON string containing the matching pattern templates.",
+                    "name": "get_patterns_by_aesthetic",
+                    "parameters": {
+                      "properties": {
+                        "aesthetic": {
+                          "default": "",
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Retrieves full sewing pattern details by unique pattern ID.\n\nArgs:\n    pattern_id: The unique identifier of the pattern (e.g. 'old-money-waistcoat',\n        'cottagecore-milkmaid-dress').\n\nReturns:\n    JSON string containing the detailed pattern information or error message.",
+                    "name": "get_pattern_by_id",
+                    "parameters": {
+                      "properties": {
+                        "pattern_id": {
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "pattern_id"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Saves or updates a user's body measurements profile in Firestore.\n\nArgs:\n    user_id: Unique identifier for the user (e.g. 'user_123' or username).\n    bust: Bust measurement in inches.\n    waist: Waist measurement in inches.\n    hip: Full hip measurement in inches.\n    height: Total height in inches.\n    back_waist_length: Back waist length measurement in inches (default 16.5).\n    preferred_aesthetic: Preferred fashion aesthetic (e.g. 'Old Money', 'Cottagecore', 'Vintage').\n\nReturns:\n    JSON string confirmation of saved profile.",
+                    "name": "save_user_profile",
+                    "parameters": {
+                      "properties": {
+                        "user_id": {
+                          "type": "STRING"
+                        },
+                        "bust": {
+                          "type": "NUMBER"
+                        },
+                        "waist": {
+                          "type": "NUMBER"
+                        },
+                        "hip": {
+                          "type": "NUMBER"
+                        },
+                        "height": {
+                          "type": "NUMBER"
+                        },
+                        "back_waist_length": {
+                          "default": 16.5,
+                          "type": "NUMBER"
+                        },
+                        "preferred_aesthetic": {
+                          "default": "Classic",
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "user_id",
+                        "bust",
+                        "waist",
+                        "hip",
+                        "height"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Retrieves a user's saved body measurements profile.\n\nArgs:\n    user_id: Unique identifier for the user.\n\nReturns:\n    JSON string containing the user profile or error if not found.",
+                    "name": "get_user_profile",
+                    "parameters": {
+                      "properties": {
+                        "user_id": {
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "user_id"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Saves a customized made-to-measure drafted garment project.\n\nArgs:\n    user_id: Unique identifier for the user.\n    project_name: Title of the project (e.g., 'My Vintage Prom Dress').\n    pattern_id: The base pattern template ID used.\n    yardage_required: Calculated fabric yardage estimate (e.g. '3.25 yards').\n    notes: Optional custom notes, fabric choices, or ease adjustments.\n\nReturns:\n    JSON string confirming project creation.",
+                    "name": "save_drafted_project",
+                    "parameters": {
+                      "properties": {
+                        "user_id": {
+                          "type": "STRING"
+                        },
+                        "project_name": {
+                          "type": "STRING"
+                        },
+                        "pattern_id": {
+                          "type": "STRING"
+                        },
+                        "yardage_required": {
+                          "type": "STRING"
+                        },
+                        "notes": {
+                          "default": "",
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "user_id",
+                        "project_name",
+                        "pattern_id",
+                        "yardage_required"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Lists all saved drafted sewing projects for a user.\n\nArgs:\n    user_id: Unique identifier for the user.\n\nReturns:\n    JSON string with list of user projects.",
+                    "name": "list_user_projects",
+                    "parameters": {
+                      "properties": {
+                        "user_id": {
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "user_id"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              }
+            ],
+            "sub_agents": []
+          }
+        },
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "root_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-262b5602-928f-4600-8e0a-01460cb25bd9",
+                        "args": {
+                          "query": "San Francisco"
+                        },
+                        "name": "get_weather"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "root_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-262b5602-928f-4600-8e0a-01460cb25bd9",
+                        "name": "get_weather",
+                        "response": {
+                          "result": "It's 60 degrees and foggy."
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "root_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "It's 60 degrees and foggy in San Francisco."
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "What is the capital of France?"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "The capital of France is Paris."
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "reference": {
+        "response": {
+          "parts": [
+            {
+              "text": "The capital of France is Paris."
+            }
+          ],
+          "role": "model"
+        }
+      },
+      "eval_case_id": "capital_lookup",
+      "agent_data": {
+        "agents": {
+          "root_agent": {
+            "agent_id": "root_agent",
+            "agent_type": "LlmAgent",
+            "description": "",
+            "instruction": "You are the Bespoke Atelier & Pattern Concierge agent. You help sewists and tailors save body measurement profiles, explore sewing pattern templates across aesthetic styles (Old Money, Vintage 1950s, Cottagecore, Minimalist), and draft bespoke sewing projects.",
+            "tools": [
+              {
+                "function_declarations": [
+                  {
+                    "description": "Simulates a web search. Use it get information on weather.\n\nArgs:\n    query: A string containing the location to get weather information for.\n\nReturns:\n    A string with the simulated weather information for the queried location.",
+                    "name": "get_weather",
+                    "parameters": {
+                      "properties": {
+                        "query": {
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "query"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Simulates getting the current time for a city.\n\nArgs:\n    query: The name of the city or query to get the current time for.\n\nReturns:\n    A string with the current time information.",
+                    "name": "get_current_time",
+                    "parameters": {
+                      "properties": {
+                        "query": {
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "query"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Retrieves available sewing patterns filtered by aesthetic style.\n\nArgs:\n    aesthetic: Filter patterns by aesthetic style (e.g., 'Old Money', 'Vintage 1950s',\n        'Cottagecore', 'Minimalist'). Leave blank to list all available patterns.\n\nReturns:\n    JSON string containing the matching pattern templates.",
+                    "name": "get_patterns_by_aesthetic",
+                    "parameters": {
+                      "properties": {
+                        "aesthetic": {
+                          "default": "",
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Retrieves full sewing pattern details by unique pattern ID.\n\nArgs:\n    pattern_id: The unique identifier of the pattern (e.g. 'old-money-waistcoat',\n        'cottagecore-milkmaid-dress').\n\nReturns:\n    JSON string containing the detailed pattern information or error message.",
+                    "name": "get_pattern_by_id",
+                    "parameters": {
+                      "properties": {
+                        "pattern_id": {
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "pattern_id"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Saves or updates a user's body measurements profile in Firestore.\n\nArgs:\n    user_id: Unique identifier for the user (e.g. 'user_123' or username).\n    bust: Bust measurement in inches.\n    waist: Waist measurement in inches.\n    hip: Full hip measurement in inches.\n    height: Total height in inches.\n    back_waist_length: Back waist length measurement in inches (default 16.5).\n    preferred_aesthetic: Preferred fashion aesthetic (e.g. 'Old Money', 'Cottagecore', 'Vintage').\n\nReturns:\n    JSON string confirmation of saved profile.",
+                    "name": "save_user_profile",
+                    "parameters": {
+                      "properties": {
+                        "user_id": {
+                          "type": "STRING"
+                        },
+                        "bust": {
+                          "type": "NUMBER"
+                        },
+                        "waist": {
+                          "type": "NUMBER"
+                        },
+                        "hip": {
+                          "type": "NUMBER"
+                        },
+                        "height": {
+                          "type": "NUMBER"
+                        },
+                        "back_waist_length": {
+                          "default": 16.5,
+                          "type": "NUMBER"
+                        },
+                        "preferred_aesthetic": {
+                          "default": "Classic",
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "user_id",
+                        "bust",
+                        "waist",
+                        "hip",
+                        "height"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Retrieves a user's saved body measurements profile.\n\nArgs:\n    user_id: Unique identifier for the user.\n\nReturns:\n    JSON string containing the user profile or error if not found.",
+                    "name": "get_user_profile",
+                    "parameters": {
+                      "properties": {
+                        "user_id": {
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "user_id"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Saves a customized made-to-measure drafted garment project.\n\nArgs:\n    user_id: Unique identifier for the user.\n    project_name: Title of the project (e.g., 'My Vintage Prom Dress').\n    pattern_id: The base pattern template ID used.\n    yardage_required: Calculated fabric yardage estimate (e.g. '3.25 yards').\n    notes: Optional custom notes, fabric choices, or ease adjustments.\n\nReturns:\n    JSON string confirming project creation.",
+                    "name": "save_drafted_project",
+                    "parameters": {
+                      "properties": {
+                        "user_id": {
+                          "type": "STRING"
+                        },
+                        "project_name": {
+                          "type": "STRING"
+                        },
+                        "pattern_id": {
+                          "type": "STRING"
+                        },
+                        "yardage_required": {
+                          "type": "STRING"
+                        },
+                        "notes": {
+                          "default": "",
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "user_id",
+                        "project_name",
+                        "pattern_id",
+                        "yardage_required"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Lists all saved drafted sewing projects for a user.\n\nArgs:\n    user_id: Unique identifier for the user.\n\nReturns:\n    JSON string with list of user projects.",
+                    "name": "list_user_projects",
+                    "parameters": {
+                      "properties": {
+                        "user_id": {
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "user_id"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              }
+            ],
+            "sub_agents": []
+          }
+        },
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "root_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "The capital of France is Paris."
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
